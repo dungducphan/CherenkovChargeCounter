@@ -481,7 +481,7 @@
             <solidref ref="world_solid"/>
 
             <physvol>
-                <file name="model_Aluminum.ast.gdml"/>
+                <file name="casing_Aluminum.ast.gdml"/>
              </physvol>
 
 

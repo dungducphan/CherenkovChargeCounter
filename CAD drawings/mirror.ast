@@ -1,0 +1,86 @@
+solid Mesh
+  facet normal 0.000000 0.707131 0.707083
+    outer loop
+      vertex 15.000000 14.127994 31.656279
+      vertex -15.000000 14.142136 31.642136
+      vertex -15.000000 14.127994 31.656279
+    endloop
+  endfacet
+  facet normal 0.000000 0.707131 0.707083
+    outer loop
+      vertex 15.000000 14.142136 31.642136
+      vertex -15.000000 14.142136 31.642136
+      vertex 15.000000 14.127994 31.656279
+    endloop
+  endfacet
+  facet normal 1.000000 0.000000 0.000000
+    outer loop
+      vertex 15.000000 -14.142136 3.357864
+      vertex 15.000000 14.142136 31.642136
+      vertex 15.000000 14.127994 31.656279
+    endloop
+  endfacet
+  facet normal 1.000000 0.000000 -0.000000
+    outer loop
+      vertex 15.000000 -14.142136 3.357864
+      vertex 15.000000 14.127994 31.656279
+      vertex 15.000000 -14.156278 3.372006
+    endloop
+  endfacet
+  facet normal 0.000000 -0.707107 -0.707107
+    outer loop
+      vertex -15.000000 -14.156278 3.372006
+      vertex 15.000000 -14.142136 3.357864
+      vertex 15.000000 -14.156278 3.372006
+    endloop
+  endfacet
+  facet normal 0.000000 -0.707107 -0.707107
+    outer loop
+      vertex -15.000000 -14.142136 3.357864
+      vertex 15.000000 -14.142136 3.357864
+      vertex -15.000000 -14.156278 3.372006
+    endloop
+  endfacet
+  facet normal -1.000000 0.000000 0.000000
+    outer loop
+      vertex -15.000000 14.142136 31.642136
+      vertex -15.000000 -14.142136 3.357864
+      vertex -15.000000 -14.156278 3.372006
+    endloop
+  endfacet
+  facet normal -1.000000 -0.000000 0.000000
+    outer loop
+      vertex -15.000000 14.142136 31.642136
+      vertex -15.000000 -14.156278 3.372006
+      vertex -15.000000 14.127994 31.656279
+    endloop
+  endfacet
+  facet normal 0.000000 0.707107 -0.707107
+    outer loop
+      vertex 15.000000 14.142136 31.642136
+      vertex 15.000000 -14.142136 3.357864
+      vertex -15.000000 -14.142136 3.357864
+    endloop
+  endfacet
+  facet normal 0.000000 0.707107 -0.707107
+    outer loop
+      vertex -15.000000 14.142136 31.642136
+      vertex 15.000000 14.142136 31.642136
+      vertex -15.000000 -14.142136 3.357864
+    endloop
+  endfacet
+  facet normal 0.000000 -0.707107 0.707107
+    outer loop
+      vertex 15.000000 -14.156278 3.372006
+      vertex 15.000000 14.127994 31.656279
+      vertex -15.000000 -14.156278 3.372006
+    endloop
+  endfacet
+  facet normal 0.000000 -0.707107 0.707107
+    outer loop
+      vertex 15.000000 14.127994 31.656279
+      vertex -15.000000 14.127994 31.656279
+      vertex -15.000000 -14.156278 3.372006
+    endloop
+  endfacet
+endsolid Mesh
