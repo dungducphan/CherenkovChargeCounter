@@ -13,7 +13,7 @@ include(${ROOT_USE_FILE})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/inc/*.hh)
 
-file(GLOB MACROS "*.mac")
+file(GLOB MACROS "*.mac" "*.csv")
 
 file(COPY ${MACROS} DESTINATION ${PROJECT_BINARY_DIR})
 file(COPY ${EXT_DATA} DESTINATION ${PROJECT_BINARY_DIR})

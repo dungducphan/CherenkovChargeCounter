@@ -7,11 +7,13 @@
 #include "G4RunManager.hh"
 #endif
 
-#include "Shielding.hh"
+#include "FTFP_BERT.hh"
 #include "G4SteppingVerbose.hh"
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
+#include "G4EmStandardPhysics_option4.hh"
+#include "G4OpticalPhysics.hh"
 
 #include "TH1D.h"
 #include "TFile.h"
@@ -30,7 +32,17 @@ int main(int argc, char** argv) {
 #endif
 
   runManager->SetUserInitialization(new detcon());
-  runManager->SetUserInitialization(new Shielding());
+
+  G4VModularPhysicsList* physicsList = new FTFP_BERT;
+  physicsList->ReplacePhysics(new G4EmStandardPhysics_option4());
+  G4OpticalPhysics* opticalPhysics = new G4OpticalPhysics();
+  auto opticalParams = G4OpticalParameters::Instance();
+  opticalParams->SetCerenkovMaxBetaChange(1.0);
+  opticalParams->SetCerenkovMaxPhotonsPerStep(10000.);
+  opticalParams->SetCerenkovTrackSecondariesFirst(true);
+
+  physicsList->RegisterPhysics(opticalPhysics);
+  runManager->SetUserInitialization(physicsList);
   runManager->SetUserInitialization(new actioninit());
 
   G4VisManager* visManager = new G4VisExecutive;

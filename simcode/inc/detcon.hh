@@ -27,6 +27,7 @@
 #include "G4IntersectionSolid.hh"
 
 #include "TMath.h"
+#include "TString.h"
 
 class G4VPhysicalVolume;
 
@@ -39,15 +40,18 @@ public:
     virtual ~detcon();
 
     virtual G4VPhysicalVolume *Construct();
+    void GetRefractiveIndex(std::string filename, std::vector<G4double>& photonEnergy, std::vector<G4double>& refractiveIndex);
 
     G4SubtractionSolid *GetCasingSolid();
+    G4UnionSolid *GetCasingMiniWorldSolid();
     G4double RadiationLength;
     G4double LightCollectionLength;
     G4double CrossSectionalSize;
     G4double WallThickness;
 
     G4NistManager *nist;
-    G4Material *worldMat;
+    G4Material *vacuumMat;
+    G4Material *carbonDioxideMat;
     G4Material *silverMat;
     G4Material *aluminumMat;
     G4Material *potassiumMat;
@@ -57,12 +61,16 @@ public:
     G4VPhysicalVolume *physWorld;
 
     G4SubtractionSolid *solidCasing;
+    G4UnionSolid *solidCasingMiniWorld;
     G4LogicalVolume *logicCasing;
+    G4LogicalVolume *logicCasingMiniWorld;
     G4VPhysicalVolume *physCasing;
+    G4VPhysicalVolume *physCasingMiniWorld;
 
     G4Box *solidMirror;
     G4LogicalVolume *logicMirror;
     G4VPhysicalVolume *physMirror;
+    G4LogicalSkinSurface *logicalSkinSurfaceMirror;
 
     G4Box *solidWindow;
     G4LogicalVolume *logicWindow;
