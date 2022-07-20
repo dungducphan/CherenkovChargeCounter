@@ -41,10 +41,17 @@ public:
     virtual G4VPhysicalVolume *Construct();
 
     G4SubtractionSolid *GetCasingSolid();
+    G4double RadiationLength;
+    G4double LightCollectionLength;
+    G4double CrossSectionalSize;
+    G4double WallThickness;
 
     G4NistManager *nist;
-
     G4Material *worldMat;
+    G4Material *silverMat;
+    G4Material *aluminumMat;
+    G4Material *potassiumMat;
+
     G4Box *solidWorld;
     G4LogicalVolume *logicWorld;
     G4VPhysicalVolume *physWorld;
@@ -52,4 +59,17 @@ public:
     G4SubtractionSolid *solidCasing;
     G4LogicalVolume *logicCasing;
     G4VPhysicalVolume *physCasing;
+
+    G4Box *solidMirror;
+    G4LogicalVolume *logicMirror;
+    G4VPhysicalVolume *physMirror;
+
+    G4Box *solidWindow;
+    G4LogicalVolume *logicWindow;
+    G4VPhysicalVolume *physWindow_1;
+    G4VPhysicalVolume *physWindow_2;
+
+    G4Box *solidPMT;
+    G4LogicalVolume *logicPMT;
+    G4VPhysicalVolume *physPMT;
 };
