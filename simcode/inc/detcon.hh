@@ -22,15 +22,34 @@
 #include "G4LogicalSkinSurface.hh"
 #include "G4SDManager.hh"
 
+#include "G4UnionSolid.hh"
+#include "G4SubtractionSolid.hh"
+#include "G4IntersectionSolid.hh"
+
 #include "TMath.h"
 
 class G4VPhysicalVolume;
+
 class G4LogicalVolume;
 
 class detcon : public G4VUserDetectorConstruction {
-  public:
+public:
     detcon();
+
     virtual ~detcon();
 
-    virtual G4VPhysicalVolume* Construct();
+    virtual G4VPhysicalVolume *Construct();
+
+    G4SubtractionSolid *GetCasingSolid();
+
+    G4NistManager *nist;
+
+    G4Material *worldMat;
+    G4Box *solidWorld;
+    G4LogicalVolume *logicWorld;
+    G4VPhysicalVolume *physWorld;
+
+    G4SubtractionSolid *solidCasing;
+    G4LogicalVolume *logicCasing;
+    G4VPhysicalVolume *physCasing;
 };
