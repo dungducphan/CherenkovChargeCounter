@@ -2,13 +2,9 @@
 
 runAction::runAction() : G4UserRunAction() {
   man = G4AnalysisManager::Instance();
-  man->CreateNtuple("Ana", "Ana");
-  man->CreateNtupleDColumn("E");
-  man->CreateNtupleDColumn("X");
-  man->CreateNtupleDColumn("Y");
-  man->CreateNtupleDColumn("Z");
-  man->CreateNtupleDColumn("T");
-  man->FinishNtuple(0);
+  man->CreateH1("Wavelength", "Wavelength", 1600, 100, 900);
+  // FIXME:
+  // man->CreateH2("Image", ";X (cellID);Y (cellID)", 60, 0, 60, 60, 0, 60);
 }
 
 runAction::~runAction() {}

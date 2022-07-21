@@ -20,6 +20,20 @@ void detcon::GetRefractiveIndex(std::string filename, std::vector<G4double>& pho
     infile.close();
 }
 
+void detcon::GetQuantumEfficiency(std::vector<G4double>& photonEnergy,
+                                  std::vector<G4double>& reflectivity,
+                                  std::vector<G4double>& quantumEfficiency) {
+    std::ifstream infile("QuantumEfficiency_PMT.csv");
+    double tmp_wl;
+    double tmp_qe;
+    while (infile >> tmp_wl >> tmp_qe) {
+        photonEnergy.push_back((1239.8 / tmp_wl) * eV);
+        quantumEfficiency.push_back(tmp_qe / 100.);
+        reflectivity.push_back(0.010);
+    }
+    infile.close();
+}
+
 G4UnionSolid *detcon::GetCasingMiniWorldSolid() {
     G4Box *box_2_0 = new G4Box("box_2_0",
                                CrossSectionalSize * 0.5 + WallThickness,
@@ -91,16 +105,17 @@ G4VPhysicalVolume *detcon::Construct() {
 
     // Aluminum
     aluminumMat = nist->FindOrBuildMaterial("G4_Al");
-    std::vector<G4double> photonEnergy_Aluminum;
-    std::vector<G4double> refractiveIndex_Aluminum;
-    GetRefractiveIndex("Aluminum", photonEnergy_Aluminum, refractiveIndex_Aluminum);
-    G4MaterialPropertiesTable* mpt_Aluminum = new G4MaterialPropertiesTable();
-    G4int numEntries_Aluminum = photonEnergy_Aluminum.size();
-    std::cout << "Number of entries: " << numEntries_Aluminum << std::endl;
-    mpt_Aluminum->AddProperty ("RINDEX", &photonEnergy_Aluminum[0], &refractiveIndex_Aluminum[0], numEntries_Aluminum);
-    //aluminumMat->SetMaterialPropertiesTable(mpt_Aluminum);
 
+    // Potassium
     potassiumMat = nist->FindOrBuildMaterial("G4_K");
+    std::vector<G4double> photonEnergy_Potassium;
+    std::vector<G4double> refractiveIndex_Potassium;
+    GetRefractiveIndex("Potassium", photonEnergy_Potassium, refractiveIndex_Potassium);
+    G4MaterialPropertiesTable* mpt_Potassium = new G4MaterialPropertiesTable();
+    G4int numEntries_Potassium = photonEnergy_Potassium.size();
+    std::cout << "Number of entries: " << numEntries_Potassium << std::endl;
+    mpt_Potassium->AddProperty ("RINDEX", &photonEnergy_Potassium[0], &refractiveIndex_Potassium[0], numEntries_Potassium);
+    potassiumMat->SetMaterialPropertiesTable(mpt_Potassium);
 
     // CO2
     carbonDioxideMat = nist->FindOrBuildMaterial("G4_CARBON_DIOXIDE");
@@ -160,24 +175,41 @@ G4VPhysicalVolume *detcon::Construct() {
 
     //-----------
     // Mirror Surfaces
-
     G4OpticalSurface* opSurf_Mirror = new G4OpticalSurface("MirrorOpSurface");
     opSurf_Mirror->SetType(dielectric_metal);
     opSurf_Mirror->SetFinish(polished);
     opSurf_Mirror->SetModel(unified);
-    std::vector<G4double> photonEnergy_Mirror = {1 * eV, 6 * eV};
+    std::vector<G4double> photonEnergy_Mirror = {1 * eV,  * eV};
     std::vector<G4double> reflectivity_Mirror = {0.9500, 0.9500};
     std::vector<G4double> efficiency_Mirror   = {0.0500, 0.0500};
     G4MaterialPropertiesTable* mpt_Mirror = new G4MaterialPropertiesTable();
-    mpt_Mirror->AddProperty("REFLECTIVITY", photonEnergy_Mirror, reflectivity_Mirror);
-    mpt_Mirror->AddProperty("EFFICIENCY", photonEnergy_Mirror, efficiency_Mirror);
+    mpt_Mirror->AddProperty("REFLECTIVITY", &photonEnergy_Mirror[0], &reflectivity_Mirror[0], 2);
+    mpt_Mirror->AddProperty("EFFICIENCY", &photonEnergy_Mirror[0], &efficiency_Mirror[0], 2);
     opSurf_Mirror->SetMaterialPropertiesTable(mpt_Mirror);
     G4LogicalBorderSurface* surf_Mirror = new G4LogicalBorderSurface("MirrorSurface", physCasingMiniWorld, physMirror, opSurf_Mirror);
-    G4OpticalSurface* opticalSurface = dynamic_cast<G4OpticalSurface*>(surf_Mirror->GetSurface(physCasingMiniWorld, physMirror)->GetSurfaceProperty());
-    if (opticalSurface)
-        opticalSurface->DumpInfo();
+
+    // PMT Surfaces
+    G4OpticalSurface* opSurf_PMT = new G4OpticalSurface("PMTOpSurface");
+    opSurf_PMT->SetType(dielectric_metal);
+    opSurf_PMT->SetFinish(polished);
+    opSurf_PMT->SetModel(unified);
+    std::vector<G4double> photonEnergy_PMT;
+    std::vector<G4double> reflectivity_PMT;
+    std::vector<G4double> efficiency_PMT;
+    GetQuantumEfficiency(photonEnergy_PMT, reflectivity_PMT, efficiency_PMT);
+    G4MaterialPropertiesTable* mpt_PMT = new G4MaterialPropertiesTable();
+    mpt_PMT->AddProperty("REFLECTIVITY", &photonEnergy_PMT[0], &reflectivity_PMT[0], photonEnergy_PMT.size());
+    mpt_PMT->AddProperty("EFFICIENCY", &photonEnergy_PMT[0], &efficiency_PMT[0], photonEnergy_PMT.size());
+    opSurf_PMT->SetMaterialPropertiesTable(mpt_PMT);
+    G4LogicalBorderSurface* surf_PMT = new G4LogicalBorderSurface("PMTSurface", physCasingMiniWorld, physPMT, opSurf_PMT);
     //----------
 
     return physWorld;
+}
+
+void detcon::ConstructSDandField() {
+    PMTSD* sd = new PMTSD("PMT");
+    G4SDManager::GetSDMpointer()->AddNewDetector(sd);
+    SetSensitiveDetector(logicPMT, sd);
 }
 

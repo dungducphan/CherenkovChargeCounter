@@ -21,13 +21,14 @@
 #include "G4LogicalBorderSurface.hh"
 #include "G4LogicalSkinSurface.hh"
 #include "G4SDManager.hh"
-
 #include "G4UnionSolid.hh"
 #include "G4SubtractionSolid.hh"
 #include "G4IntersectionSolid.hh"
 
 #include "TMath.h"
 #include "TString.h"
+
+#include "pmtsd.hh"
 
 class G4VPhysicalVolume;
 
@@ -40,7 +41,10 @@ public:
     virtual ~detcon();
 
     virtual G4VPhysicalVolume *Construct();
+    void ConstructSDandField();
+
     void GetRefractiveIndex(std::string filename, std::vector<G4double>& photonEnergy, std::vector<G4double>& refractiveIndex);
+    void GetQuantumEfficiency(std::vector<G4double>& photonEnergy, std::vector<G4double>& reflectivity, std::vector<G4double>& quantumEfficiency);
 
     G4SubtractionSolid *GetCasingSolid();
     G4UnionSolid *GetCasingMiniWorldSolid();
