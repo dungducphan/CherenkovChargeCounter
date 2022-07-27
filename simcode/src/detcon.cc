@@ -179,7 +179,7 @@ G4VPhysicalVolume *detcon::Construct() {
     opSurf_Mirror->SetType(dielectric_metal);
     opSurf_Mirror->SetFinish(polished);
     opSurf_Mirror->SetModel(unified);
-    std::vector<G4double> photonEnergy_Mirror = {1 * eV,  * eV};
+    std::vector<G4double> photonEnergy_Mirror = {1 * eV,  6 * eV};
     std::vector<G4double> reflectivity_Mirror = {0.9500, 0.9500};
     std::vector<G4double> efficiency_Mirror   = {0.0500, 0.0500};
     G4MaterialPropertiesTable* mpt_Mirror = new G4MaterialPropertiesTable();

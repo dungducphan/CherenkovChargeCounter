@@ -7,7 +7,7 @@ generator::generator() {
   G4ParticleDefinition *particle = G4ParticleTable::GetParticleTable()->FindParticle("e-");
 
   sps->SetParticleDefinition(particle);
-  sps->SetNumberOfParticles(10000);
+  sps->SetNumberOfParticles(50000);
 
   sps->GetPosDist()->SetPosDisType("Point"); // Point, Beam, Plane, Surface, Volume
   sps->GetPosDist()->SetCentreCoords(G4ThreeVector(0., 0., -13 * cm));
