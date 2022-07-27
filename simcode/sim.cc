@@ -37,8 +37,8 @@ int main(int argc, char** argv) {
   physicsList->ReplacePhysics(new G4EmStandardPhysics_option4());
   G4OpticalPhysics* opticalPhysics = new G4OpticalPhysics();
   auto opticalParams = G4OpticalParameters::Instance();
-  opticalParams->SetCerenkovMaxBetaChange(1.0);
-  opticalParams->SetCerenkovMaxPhotonsPerStep(10000.);
+  opticalParams->SetCerenkovMaxBetaChange(0.1);
+  opticalParams->SetCerenkovMaxPhotonsPerStep(100000.);
   opticalParams->SetCerenkovTrackSecondariesFirst(true);
 
   physicsList->RegisterPhysics(opticalPhysics);

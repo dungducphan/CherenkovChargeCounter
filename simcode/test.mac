@@ -1,3 +1,3 @@
-/run/numberOfThreads 48
+/run/numberOfThreads 1
 /run/initialize
-/run/beamOn 48
+/run/beamOn 10

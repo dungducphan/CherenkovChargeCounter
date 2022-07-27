@@ -1,6 +1,20 @@
+#include "TGraph.h"
+#include "TCanvas.h"
+#include "TFile.h"
+#include "TH1.h"
+#include "TMultiGraph.h"
+#include "TLegend.h"
+
+#include <fstream>
+#include <iostream>
+#include <string>
+
 TGraph* GetLight(std::string file) {
   TFile* inroot = new TFile(Form("Chev.%s.root", file.c_str()), "READ");
   TH1D* hwl = (TH1D*) inroot->Get("Wavelength");
+
+  std::cout << file.c_str() << ": " << hwl->Integral(hwl->FindBin(300.), hwl->FindBin(500.)
+  ) / 5. << std::endl;
 
   std::ifstream infile("QuantumEfficiency_PMT.csv");
   double tmp_wl;
@@ -26,40 +40,23 @@ TGraph* GetLight(std::string file) {
   return gr_detected;
 }
 
+void Add(std::string file, TMultiGraph* mgr, TLegend* leg, Color_t color, std::string legendStr) {
+  TGraph* gr = GetLight(file.c_str());
+  gr->SetLineColor(color);
+  mgr->Add(gr, "L");
+  leg->AddEntry(gr, legendStr.c_str(), "L");
+}
+
 void Ana() {
-  TGraph* F2 = GetLight("2GeV");
-  TGraph* F5 = GetLight("5GeV");
-  TGraph* L2 = GetLight("200M");
-  TGraph* TL2 = GetLight("T_200M");
-  TGraph* TF5 = GetLight("T_5GeV");
-  TGraph* TF2 = GetLight("T_2GeV");
+    TMultiGraph* mgr = new TMultiGraph();
+    TLegend* leg = new TLegend(0.4, 0.5, 0.8, 0.8);
+    leg->SetBorderSize(0);
 
-  TMultiGraph* mgr = new TMultiGraph();
-  F2->SetLineColor(kRed);
-  mgr->Add(F2, "L");
-  F5->SetLineColor(kBlue);
-  mgr->Add(F5, "L");
-  L2->SetLineColor(kOrange);
-  mgr->Add(L2, "L");
-  TL2->SetLineColor(kCyan);
-  mgr->Add(TL2, "L");
-  TF5->SetLineColor(kViolet);
-  mgr->Add(TF5, "L");
-  TF2->SetLineColor(kBlack);
-  mgr->Add(TF2, "L");
+    Add("2GeV", mgr, leg, kRed, "2 GeV");
 
-  mgr->GetXaxis()->SetTitle("Wavelength (nm)");
-  mgr->GetYaxis()->SetTitle("No. of detected photons (a.u.)");
-
-  TLegend* leg = new TLegend(0.5, 0.8, 0.5, 0.8);
-  leg->SetBorderSize(0);
-  leg->AddEntry(L2, "200 MeV", "L");
-  leg->AddEntry(F2, "2 GeV", "L");
-  leg->AddEntry(F5, "5 GeV", "L");
-  leg->AddEntry(TL2, "200 MeV, 5#times charge", "L");
-  leg->AddEntry(TF2, "2 GeV, 5#times charge", "L");
-  leg->AddEntry(TF5, "5 GeV, 5#times charge", "L");
-
-  mgr->Draw("AL");
-  leg->Draw();
+    TCanvas* c = new TCanvas();
+    mgr->Draw("A");
+    mgr->GetXaxis()->SetTitle("Wavelength (nm)");
+    mgr->GetYaxis()->SetTitle("No. of detected photons (a.u.)");
+    c->SaveAs("CherenkovSpectrum.pdf");
 }
